@@ -7,6 +7,18 @@ main {
   height: calc(100vh - 56px); /* router view - navbar height */
   overflow: scroll;
   color: white;
+  
+  background-size: cover;
+}
+
+body {
+  margin: 0;
+  font-family: sans-serif;
+  background-image: url('assets/kukai-art-xS_lI4mtyzs-unsplash.jpg');
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+  min-height: 100vh;
 }
 
 .card {

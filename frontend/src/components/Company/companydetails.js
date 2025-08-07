@@ -26,22 +26,25 @@ function CompanyDetail() {
     <div className="CompanyDetail">
       <h2>{company.name}</h2>
       <p>{company.description}</p>
-      <p>Employees: {company.numEmployees}</p>
-
+      <p>Number of Employees: {company.numEmployees}</p>
+  
       <h3>Jobs:</h3>
       {company.jobs && company.jobs.length > 0 ? (
-        <ul>
-          {company.jobs.map(job => (
-            <li key={job.id}>
-              {job.title} — Salary: {job.salary} — Equity: {job.equity}
-            </li>
-          ))}
-        </ul>
-      ) : (
-        <p>No jobs listed for this company.</p>
-      )}
+  <ul>
+    {company.jobs.map(job => (
+      <li key={job.id}>
+        {job.title} — Salary: {job.salary} — Equity: {job.equity}
+      </li>
+    ))}
+  </ul>
+) : (
+  <p>No jobs available.</p>
+)}
+
+
     </div>
   );
+  
 }
 
 export default CompanyDetail;

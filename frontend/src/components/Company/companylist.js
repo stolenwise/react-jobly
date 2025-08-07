@@ -1,52 +1,51 @@
 import { Link } from 'react-router-dom';
-import React, {useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import JoblyApi from "../../api";
+import CompanyCard from "./companycard"; // ✅ Don't forget this!
 import "./companylist.css";
 
-
 function CompanyList() {
-   const [companies, setCompanies] = useState([]);
-   const [loading, setLoading] = useState(true);
-   const [error, setError] = useState(null);
+  const [companies, setCompanies] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-   useEffect(() => {
+  useEffect(() => {
     console.log("CompanyList mounted");
     async function fetchCompanies() {
-        try {
-            const result = await JoblyApi.getCompanies()
-            console.log("Fetched companies:", result)
-            setCompanies(result);         
-        } catch (error) {
-            setError(error);
-        } finally {
-            setLoading(false);
-        }
-    };
-    
+      try {
+        const result = await JoblyApi.getCompanies();
+        console.log("Fetched companies:", result);
+        setCompanies(result);         
+      } catch (error) {
+        setError(error);
+      } finally {
+        setLoading(false);
+      }
+    }
 
     fetchCompanies();
-    
-   }, []); // Empty dependency array means this runs once on mount
+  }, []);
 
-   if (loading) {
+  if (loading) {
     return <div>Loading data...</div>;
-   }
+  }
 
-
-   return(
+  return (
     <div>
-
-      {/* Company List */}
       <h1>Companies</h1>
-      <ul className="company-list">
+      <div className="company-list">
         {companies.map(c => (
-          <li key={c.handle}>
-            <Link to={`/companies/${c.handle}`}>{c.name}</Link>
-          </li>
-      ))}
-    </ul>
-    </div>  
-   )
+          <CompanyCard
+            key={c.handle}
+            handle={c.handle}
+            name={c.name}
+            description={c.description}
+            logoUrl={c.logoUrl}
+          />
+        ))}
+      </div>
+    </div>
+  );
 }
 
 export default CompanyList;
