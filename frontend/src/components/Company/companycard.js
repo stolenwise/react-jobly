@@ -11,14 +11,7 @@ function CompanyCard({ handle, name, description, logoUrl }) {
           <div className="CompanyCard-text">
             <h3>{name}</h3>
             <p>{description}</p>
-          </div>
-          {logoUrl && (
-            <img
-              className="CompanyCard-logo"
-              src={logoUrl}
-              alt={`${name} logo`}
-            />
-          )}
+            </div>
         </div>
       </Link>
     </div>

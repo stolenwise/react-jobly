@@ -5,6 +5,8 @@ import NavBar from "./components/navbar";
 import ApiTest from "./components/apitest";
 import CompanyList from "./components/Company/companylist";
 import CompanyDetails from "./components/Company/companydetails";
+import JobList from "./components/Jobs/joblist";
+import JobDetails from "./components/Jobs/jobdetails";
 
 
 
@@ -18,6 +20,8 @@ function App() {
           <Route path="/test" element={<ApiTest />} />
           <Route path="/companies" element={<CompanyList />} />
           <Route path="/companies/:handle" element={<CompanyDetails />} />
+          <Route path="/jobs" element={<JobList />} />
+          <Route path="/jobs/:id" element={<JobDetails />} />
 
         </Routes>
         </main>

@@ -44,11 +44,26 @@ class JoblyApi {
   }
 
 
-  static async getCompanies() {
-    let res = await this.request(`companies`);
+  static async getCompanies(nameFilter) {
+    const params = nameFilter ? { name: nameFilter } : {};
+    const res = await this.request(`companies`, params);
     return res.companies;  // array of companies
   }
+
+  static async getJobs(titleFilter) {
+    const params = titleFilter ? { title: titleFilter } : {};
+    const res = await this.request("jobs", params);
+    return res.jobs;
+  }
+  
+  static async getJob(id) {
+    const res = await this.request(`jobs/${id}`);
+    return res.job;
+  }
+
 }
+
+
 
 // for now, put token ("testuser" / "password" on class)
 JoblyApi.token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZ" +

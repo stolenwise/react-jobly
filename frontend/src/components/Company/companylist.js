@@ -1,12 +1,13 @@
 import { Link } from 'react-router-dom';
 import React, { useState, useEffect } from "react";
 import JoblyApi from "../../api";
-import CompanyCard from "./companycard"; // ✅ Don't forget this!
+import CompanyCard from "./companycard"; 
 import "./companylist.css";
 
 function CompanyList() {
   const [companies, setCompanies] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [term, setTerm] = useState("");
   const [error, setError] = useState(null);
 
   useEffect(() => {
@@ -26,14 +27,32 @@ function CompanyList() {
     fetchCompanies();
   }, []);
 
+  async function handleSearch(e) {
+    e.preventDefault();
+    setLoading(true);
+    const comps = await JoblyApi.getCompanies(term.trim() || undefined);
+    setCompanies(comps);
+    setLoading(false);
+}
+
   if (loading) {
     return <div>Loading data...</div>;
   }
 
   return (
     <div>
+     <div className="company-list">
       <h1>Companies</h1>
-      <div className="company-list">
+
+      <form onSubmit={handleSearch} style={{ marginBottom: 16 }}>
+        <input 
+        value={term}
+        onChange={(e) => setTerm(e.target.value)}
+        placeholder="Search companies..."
+        />
+        <button>Search</button>
+      </form>
+      
         {companies.map(c => (
           <CompanyCard
             key={c.handle}
