@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const BASE_URL = process.env.REACT_APP_BASE_URL || "http://localhost:3001";
+const BASE_URL = "http://localhost:3001";
 
 /** API Class.
  *
@@ -15,28 +15,32 @@ class JoblyApi {
   static token;
 
   static async request(endpoint, data = {}, method = "get") {
-    console.debug("API Call:", endpoint, data, method);
-
-    //there are multiple ways to pass an authorization token, this is how you pass it in the header.
-    //this has been provided to show you another way to pass the token. you are only expected to read this code for this project.
     const url = `${BASE_URL}/${endpoint}`;
-    const headers = { Authorization: `Bearer ${JoblyApi.token}` };
-    const params = (method === "get")
-        ? data
-        : {};
-
+    const headers = JoblyApi.token ? { Authorization: `Bearer ${JoblyApi.token}` } : {};
+    const params = (method === "get") ? data : {};
+  
     try {
-      return (await axios({ url, method, data, params, headers })).data;
+      const resp = await axios({ url, method, data, params, headers });
+      return resp.data;
     } catch (err) {
-      console.error("API Error:", err.response);
-      let message = err.response.data.error.message;
+      console.error("API Error:", err);
+  
+      // Be defensive: err.response may be undefined on network errors
+      const message =
+        err?.response?.data?.error?.message ||
+        err?.message ||
+        "Network error";
+  
+      // Normalize to an array as the rest of the app expects
       throw Array.isArray(message) ? message : [message];
     }
   }
+  
 
   // Individual API routes
 
-  /** Get details on a company by handle. */
+// Company API helpers
+
 
   static async getCompany(handle) {
     let res = await this.request(`companies/${handle}`);
@@ -50,25 +54,53 @@ class JoblyApi {
     return res.companies;  // array of companies
   }
 
+  // Job API helpers
+
+  
   static async getJobs(titleFilter) {
     const params = titleFilter ? { title: titleFilter } : {};
     const res = await this.request("jobs", params);
     return res.jobs;
   }
   
+  // get Job Details for job/:id
   static async getJob(id) {
     const res = await this.request(`jobs/${id}`);
     return res.job;
   }
 
+
+  // Auth API Helpers
+
+// get token for login
+static async login(credentials) {
+  const res = await this.request("auth/token", credentials, "post");
+  return res.token;
+}
+
+// get token for signup
+static async signup(data) {
+  const res = await this.request("auth/register", data, "post");
+  return res.token;
+}
+
+// get current user
+static async getCurrentUser(username) {
+  const res = await this.request(`users/${username}`);
+  return res.user;
+}
+
 }
 
 
 
+
+
+
 // for now, put token ("testuser" / "password" on class)
-JoblyApi.token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZ" +
-    "SI6InRlc3R1c2VyIiwiaXNBZG1pbiI6ZmFsc2UsImlhdCI6MTU5ODE1OTI1OX0." +
-    "FtrMwBQwe6Ue-glIFgz_Nf8XxRT2YecFCiSpYL0fCXc";
+// JoblyApi.token = "eyJh...";  // disable for now
+JoblyApi.token = null;
+
 
 
 export default JoblyApi;

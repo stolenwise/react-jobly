@@ -7,16 +7,65 @@ import CompanyList from "./components/Company/companylist";
 import CompanyDetails from "./components/Company/companydetails";
 import JobList from "./components/Jobs/joblist";
 import JobDetails from "./components/Jobs/jobdetails";
+import { useEffect, useState } from "react";
+import { jwtDecode } from "jwt-decode";
+import useLocalStorage from "./hooks/useLocalStorage";
+import JoblyApi from "./api";
+import LoginForm from "./components/Auth/loginform";
+import SignupForm from "./components/Auth/signupform";
 
 
 
 function App() {
+  const [token, setToken] = useLocalStorage("jobly-token", null);
+  const [currentUser, setCurrentUser] = useState(null);
+  const [infoLoaded, setInfoLoaded] = useState(false);
+
+  useEffect(() => {
+    async function loadUser() {
+      setInfoLoaded(false);
+      try {
+        if (token) {
+          JoblyApi.token = token;
+          const { username } = jwtDecode(token);
+          const user = await JoblyApi.getCurrentUser(username);
+          setCurrentUser(user);
+        } else {
+          setCurrentUser(null);
+        }
+      } catch (err) {
+        console.error("loadUser failed", err);
+        setCurrentUser(null);
+      } finally {
+        setInfoLoaded(true);
+      }
+    }
+    loadUser();
+  }, [token]);
+
+  async function login(credentials) {
+    const t = await JoblyApi.login(credentials);
+    setToken(t);
+  }
+  async function signup(data) {
+    const t = await JoblyApi.signup(data);
+    setToken(t);
+  }
+  function logout() {
+    setToken(null);
+    setCurrentUser(null);
+  }
+
+
   return (
     <div className="App">
       <BrowserRouter>
-        <NavBar />
+        <NavBar currentUser={currentUser} logout={logout} />
         <main>
         <Routes>
+          <Route path="/login" element={<LoginForm login={login} />} />
+          <Route path="/signup" element={<SignupForm signup={signup} />} />
+
           <Route path="/test" element={<ApiTest />} />
           <Route path="/companies" element={<CompanyList />} />
           <Route path="/companies/:handle" element={<CompanyDetails />} />

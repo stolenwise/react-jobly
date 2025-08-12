@@ -12,11 +12,19 @@ function Navbar({ username, logout }) {
       <div className="Navbar-right">
         <Link to="/companies">Companies</Link>
         <Link to="/jobs">Jobs</Link>
-        <Link to="/profile">Profile</Link>
-        {username && (
-          <Link to="/" onClick={logout}>
-            Log out {username}
-          </Link>
+
+        {username ? (
+          <>
+            <Link to="/profile">Profile</Link>
+            <Link to="/" onClick={logout}>
+              Log out {username}
+            </Link>
+          </>
+        ) : (
+          <>
+            <Link to="/login">Log In</Link>
+            <Link to="/signup">Sign Up</Link>
+          </>
         )}
       </div>
     </nav>
@@ -24,4 +32,5 @@ function Navbar({ username, logout }) {
 }
 
 export default Navbar;
+
 
