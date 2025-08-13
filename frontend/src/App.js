@@ -43,14 +43,27 @@ function App() {
     loadUser();
   }, [token]);
 
+  async function signup(data) {
+    const t = await JoblyApi.signup(data);
+    setToken(t);                  // persists via useLocalStorage
+  
+    // set user right away instead of waiting for useEffect
+    JoblyApi.token = t;
+    const { username } = jwtDecode(t);
+    const user = await JoblyApi.getCurrentUser(username);
+    setCurrentUser(user);
+  }
+  
   async function login(credentials) {
     const t = await JoblyApi.login(credentials);
     setToken(t);
+  
+    JoblyApi.token = t;
+    const { username } = jwtDecode(t);
+    const user = await JoblyApi.getCurrentUser(username);
+    setCurrentUser(user);
   }
-  async function signup(data) {
-    const t = await JoblyApi.signup(data);
-    setToken(t);
-  }
+  
   function logout() {
     setToken(null);
     setCurrentUser(null);
@@ -60,7 +73,7 @@ function App() {
   return (
     <div className="App">
       <BrowserRouter>
-        <NavBar currentUser={currentUser} logout={logout} />
+        {infoLoaded && <NavBar currentUser={currentUser} logout={logout} />}
         <main>
         <Routes>
           <Route path="/login" element={<LoginForm login={login} />} />

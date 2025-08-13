@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import "./loginform.css";
 
 
 function LoginForm({ login }) {
@@ -15,19 +16,22 @@ function LoginForm({ login }) {
     e.preventDefault();
     try {
       await login(form);
-      navigate("/"); // go home on success
+      navigate("/companies"); // start on /companies route
     } catch (err) {
       setError(err);
     }
   }
 
   return (
-    <form onSubmit={handleSubmit}>
+    <div className="LoginPage">
+      <h3> Log In</h3>
+    <form className="LoginForm" onSubmit={handleSubmit}>
       <input name="username" value={form.username} onChange={handleChange} placeholder="username" />
       <input name="password" type="password" value={form.password} onChange={handleChange} placeholder="password" />
-      <button>Log in</button>
+      <button type="submit" className="LoginBtn">Log in</button>
       {error && <div style={{color:'red'}}>{String(error)}</div>}
     </form>
+    </div>
   );
 }
 

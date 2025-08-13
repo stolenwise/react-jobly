@@ -2,7 +2,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 import "./navbar.css";
 
-function Navbar({ username, logout }) {
+function Navbar({ currentUser, logout }) {
   return (
     <nav className="Navbar">
       <div className="Navbar-left">
@@ -13,19 +13,17 @@ function Navbar({ username, logout }) {
         <Link to="/companies">Companies</Link>
         <Link to="/jobs">Jobs</Link>
 
-        {username ? (
-          <>
-            <Link to="/profile">Profile</Link>
-            <Link to="/" onClick={logout}>
-              Log out {username}
-            </Link>
-          </>
-        ) : (
-          <>
-            <Link to="/login">Log In</Link>
-            <Link to="/signup">Sign Up</Link>
-          </>
-        )}
+        {currentUser ? (
+        <>
+          <span className="Navbar-greeting">Hi, {currentUser.username}</span>
+          <button className="Navbar-logout" onClick={logout}>Log out</button>
+        </>
+      ) : (
+        <>
+          <Link to="/login">Log In</Link>
+          <Link to="/signup">Sign Up</Link>
+        </>
+      )}
       </div>
     </nav>
   );

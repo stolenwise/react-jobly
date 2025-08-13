@@ -34,4 +34,34 @@
   .Navbar-right a:hover {
     color: #000;
   }
+
+  .Navbar-user {
+    display: flex;
+    align-items: center;  /* vertically centers text and button */
+    gap: 10px;            /* space between greeting and button */
+  }
   
+  /* Style for the greeting text */
+.Navbar-greeting {
+  font-size: 18px;
+  font-weight: 500;
+  color: #333;
+}
+
+/* Style for the logout button */
+.Navbar-logout {
+  background: transparent;
+  border: 1px solid #888;
+  border-radius: 6px;
+
+  font-size: 18px;
+  color: #333;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+}
+
+.Navbar-logout:hover {
+  background-color: #2563eb;
+  color: white;
+  border-color: #2563eb;
+}
