@@ -13,6 +13,11 @@ import useLocalStorage from "./hooks/useLocalStorage";
 import JoblyApi from "./api";
 import LoginForm from "./components/Auth/loginform";
 import SignupForm from "./components/Auth/signupform";
+import ProfileForm from "./components/Auth/profileform";
+import ProfileView from "./components/Auth/profileview";
+import Home from "./home.js";
+import RequireAuth from "./components/Auth/requireauth";
+import NotFound from "./components/notfound";
 
 
 
@@ -69,6 +74,20 @@ function App() {
     setCurrentUser(null);
   }
 
+  async function updateProfile(formData) {
+    try {
+      // username comes from currentUser
+      const updated = await JoblyApi.saveProfile(currentUser.username, formData);
+      setCurrentUser(updated);            // reflect changes app-wide
+      return { success: true };
+    } catch (errs) {
+      // errs is an array from your request helper
+      return { success: false, errs };
+    }
+  }
+
+  // Wait until currentUser data (or null) is loaded before showing anything
+  if (!infoLoaded) return <div style={{ padding: 20 }}>Loading…</div>;
 
   return (
     <div className="App">
@@ -76,14 +95,22 @@ function App() {
         {infoLoaded && <NavBar currentUser={currentUser} logout={logout} />}
         <main>
         <Routes>
+          {/* public routes */}
           <Route path="/login" element={<LoginForm login={login} />} />
           <Route path="/signup" element={<SignupForm signup={signup} />} />
-
+          <Route path="/" element={<Home currentUser={currentUser} />} />
           <Route path="/test" element={<ApiTest />} />
-          <Route path="/companies" element={<CompanyList />} />
+          <Route path="*" element={<NotFound/>} />
+
+          {/* protected routes */}
+        <Route element={<RequireAuth currentUser={currentUser} infoLoaded={infoLoaded} />}>
+          <Route path="/profile" element={<ProfileView currentUser={currentUser} />} />
+          <Route path="/edit-profile" element={<ProfileForm currentUser={currentUser} updateProfile={updateProfile} />} />  <Route path="/companies" element={<CompanyList />} />
           <Route path="/companies/:handle" element={<CompanyDetails />} />
           <Route path="/jobs" element={<JobList />} />
           <Route path="/jobs/:id" element={<JobDetails />} />
+        </Route>
+     
 
         </Routes>
         </main>

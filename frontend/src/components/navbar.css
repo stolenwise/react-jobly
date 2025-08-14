@@ -45,7 +45,7 @@
 .Navbar-greeting {
   font-size: 18px;
   font-weight: 500;
-  color: #333;
+  color: #000000;
 }
 
 /* Style for the logout button */
@@ -64,4 +64,13 @@
   background-color: #2563eb;
   color: white;
   border-color: #2563eb;
+}
+
+.username-link {
+  text-decoration: underline !important;
+  color: #2563eb; /* keeps original color */
+}
+
+.username-link:hover {
+  text-decoration: none; /* optional: remove underline on hover */
 }

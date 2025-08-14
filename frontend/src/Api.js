@@ -90,7 +90,16 @@ static async getCurrentUser(username) {
   return res.user;
 }
 
+
+static async saveProfile(username, data) {
+  // backend usually expects: { firstName, lastName, email, password }
+  const res = await this.request(`users/${username}`, data, "patch");
+  return res.user; // updated user
 }
+
+
+}
+
 
 
 

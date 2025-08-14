@@ -14,16 +14,19 @@ function Navbar({ currentUser, logout }) {
         <Link to="/jobs">Jobs</Link>
 
         {currentUser ? (
-        <>
-          <span className="Navbar-greeting">Hi, {currentUser.username}</span>
-          <button className="Navbar-logout" onClick={logout}>Log out</button>
-        </>
-      ) : (
-        <>
-          <Link to="/login">Log In</Link>
-          <Link to="/signup">Sign Up</Link>
-        </>
-      )}
+  <div className="Navbar-user">
+    <span>
+  Hi, <Link to="/profile" className="username-link"> {currentUser.username}</Link>
+</span>
+    <button className="Navbar-logout" onClick={logout}>Log out</button>
+  </div>
+) : (
+  <>
+    <Link to="/login">Log In</Link>
+    <Link to="/signup">Sign Up</Link>
+  </>
+)}
+
       </div>
     </nav>
   );
