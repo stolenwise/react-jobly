@@ -36,8 +36,8 @@ function CompanyDetail({ hasAppliedToJob, applyToJob }) {   // <- accept props
           salary={j.salary}
           equity={j.equity}
           companyName={company.name}
-          hasAppliedToJob={hasAppliedToJob}  // <- pass down
-          applyToJob={applyToJob}            // <- pass down
+          hasAppliedToJob={hasAppliedToJob}  // for apply button
+          applyToJob={applyToJob}            // for apply button
         />
       ))}
     </div>
