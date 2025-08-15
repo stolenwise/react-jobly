@@ -86,6 +86,37 @@ function App() {
     }
   }
 
+
+  function hasAppliedToJob(jobId) {
+    if (!currentUser) return false;
+    const ids = currentUser.applications
+      || (currentUser.jobs ? currentUser.jobs.map(j => j.id) : []);
+    return ids.includes(jobId);
+  }
+  
+  async function applyToJob(jobId) {
+    if (!currentUser || hasAppliedToJob(jobId)) return;
+  
+    setCurrentUser(u => {
+      const ids = u.applications || (u.jobs ? u.jobs.map(j => j.id) : []);
+      return { ...u, applications: [...ids, jobId] }; // triggers re-render everywhere
+    });
+  
+    try {
+      await JoblyApi.applyToJob(currentUser.username, jobId);
+    } catch (err) {
+      // rollback on error
+      setCurrentUser(u => {
+        const ids = u.applications || (u.jobs ? u.jobs.map(j => j.id) : []);
+        return { ...u, applications: ids.filter(id => id !== jobId) };
+      });
+      console.error("applyToJob failed:", err);
+    }
+  }
+  
+
+
+
   // Wait until currentUser data (or null) is loaded before showing anything
   if (!infoLoaded) return <div style={{ padding: 20 }}>Loading…</div>;
 
@@ -106,8 +137,8 @@ function App() {
         <Route element={<RequireAuth currentUser={currentUser} infoLoaded={infoLoaded} />}>
           <Route path="/profile" element={<ProfileView currentUser={currentUser} />} />
           <Route path="/edit-profile" element={<ProfileForm currentUser={currentUser} updateProfile={updateProfile} />} />  <Route path="/companies" element={<CompanyList />} />
-          <Route path="/companies/:handle" element={<CompanyDetails />} />
-          <Route path="/jobs" element={<JobList />} />
+          <Route path="/jobs" element={<JobList hasAppliedToJob={hasAppliedToJob} applyToJob={applyToJob} />}/>
+          <Route path="/companies/:handle" element={<CompanyDetails hasAppliedToJob={hasAppliedToJob} applyToJob={applyToJob} />}/>
           <Route path="/jobs/:id" element={<JobDetails />} />
         </Route>
      

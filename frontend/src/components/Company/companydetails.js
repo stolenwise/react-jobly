@@ -1,57 +1,47 @@
-import React, { useState, useEffect } from "react";
+// src/components/Company/companydetails.js
+import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import JoblyApi from "../../api";
 import JobCard from "../Jobs/jobcards";
 
-function CompanyDetail() {
+function CompanyDetail({ hasAppliedToJob, applyToJob }) {   // <- accept props
   const { handle } = useParams();
   const [company, setCompany] = useState(null);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
-    async function getCompanyDetails() {
+    (async function load() {
       try {
-        const result = await JoblyApi.getCompany(handle);
-        console.log("fetched company:", result);  //  already seeing this
-        setCompany(result);
-      } catch (err) {
-        console.error("Error loading company details:", err);
+        const c = await JoblyApi.getCompany(handle);
+        setCompany(c);
+      } catch (e) {
+        setError(e);
       }
-    }
-
-    getCompanyDetails();
+    })();
   }, [handle]);
 
-  if (!company) return <p>Loading...</p>;
+  if (error) return <div style={{ color: "red" }}>Error: {String(error)}</div>;
+  if (!company) return <div>Loading…</div>;
 
   return (
-    <div className="CompanyDetail">
-      <h2>{company.name}</h2>
+    <div>
+      <h1>{company.name}</h1>
       <p>{company.description}</p>
-      <p>Number of Employees: {company.numEmployees}</p>
-  
-      <h3>Jobs:</h3>
-      {company.jobs && company.jobs.length > 0 ? (
-  <ul>
-   {company.jobs.map(j => (
-  <JobCard
-    key={j.id}
-    id={j.id}                // <-- IMPORTANT
-    title={j.title}
-    salary={j.salary}
-    equity={j.equity}
-  />
-))}
-  </ul>
-) : (
-  <p>No jobs available.</p>
-)}
 
-
+      {company.jobs.map(j => (
+        <JobCard
+          key={j.id}
+          id={j.id}
+          title={j.title}
+          salary={j.salary}
+          equity={j.equity}
+          companyName={company.name}
+          hasAppliedToJob={hasAppliedToJob}  // <- pass down
+          applyToJob={applyToJob}            // <- pass down
+        />
+      ))}
     </div>
   );
-  
 }
 
 export default CompanyDetail;
-
-

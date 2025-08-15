@@ -5,7 +5,7 @@ import JobCard from "./jobcards";
 import JobDetails from "./jobdetails";
 import "./jobcards.css";
 
-function JobList() {
+function JobList({ hasAppliedToJob, applyToJob }) {
   const [jobs, setJobs] = useState([]);
   const [term, setTerm] = useState("");
   const [loading, setLoading] = useState(true);
@@ -67,6 +67,8 @@ function JobList() {
             salary={j.salary}
             equity={j.equity}
             companyName={j.companyName}
+            hasAppliedToJob={hasAppliedToJob}
+            applyToJob={applyToJob}
           />
         ))}
       </div>

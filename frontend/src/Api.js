@@ -97,9 +97,13 @@ static async saveProfile(username, data) {
   return res.user; // updated user
 }
 
+static async applyToJob(username, jobId) {
+  // POST /users/:username/jobs/:id   -> { applied: jobId }
+  const res = await this.request(`users/${username}/jobs/${jobId}`, {}, "post");
+  return res.applied;
 
 }
-
+}
 
 
 
