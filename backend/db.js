@@ -3,21 +3,13 @@
 const { Client } = require("pg");
 const { getDatabaseUri } = require("./config");
 
-let db;
-
-if (process.env.NODE_ENV === "production") {
-  db = new Client({
-    connectionString: getDatabaseUri(),
-    ssl: {
-      rejectUnauthorized: false
-    }
-  });
-} else {
-  db = new Client({
-    connectionString: getDatabaseUri()
-  });
-}
+// keep TLS, skip CA verification (needed for many local/VPN setups with Supabase pool)
+const db = new Client({
+  connectionString: getDatabaseUri(),
+  ssl: { require: true, rejectUnauthorized: false },
+});
 
 db.connect();
 
 module.exports = db;
+
