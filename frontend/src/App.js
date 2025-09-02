@@ -2,7 +2,7 @@ import logo from './logo.svg';
 import './App.css';
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import NavBar from "./components/NavBar";
-import ApiTest from "./components/apitest";
+import ApiTest from "./components/ApiTest";
 import CompanyList from "./components/Company/companylist";
 import CompanyDetails from "./components/Company/companydetails";
 import JobList from "./components/Jobs/joblist";
