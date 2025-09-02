@@ -10,7 +10,7 @@ import JobDetails from "./components/Jobs/jobdetails";
 import { useEffect, useState } from "react";
 import { jwtDecode } from "jwt-decode";
 import useLocalStorage from "./hooks/useLocalStorage";
-import JoblyApi from "./api";
+import JoblyApi from "./Api";
 import LoginForm from "./components/Auth/loginform";
 import SignupForm from "./components/Auth/signupform";
 import ProfileForm from "./components/Auth/profileform";
