@@ -1,7 +1,7 @@
 // src/components/Company/companydetails.js
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import JoblyApi from "../../api";
+import JoblyApi from "../../Api";
 import JobCard from "../Jobs/jobcards";
 
 function CompanyDetail({ hasAppliedToJob, applyToJob }) {   // <- accept props

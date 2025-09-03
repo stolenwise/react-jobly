@@ -1,6 +1,6 @@
 // src/components/Jobs/JobList.js
 import React, { useEffect, useState } from "react";
-import JoblyApi from "../../api";
+import JoblyApi from "../../Api";
 import JobCard from "./jobcards";
 import JobDetails from "./jobdetails";
 import "./jobcards.css";

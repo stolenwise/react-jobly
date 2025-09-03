@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import JoblyApi from "../api";
+import JoblyApi from "../Api";
 
 function ApiTest() {
   const [company, setCompany] = useState(null);
